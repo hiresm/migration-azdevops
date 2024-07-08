@@ -1,0 +1,26 @@
+stages:
+  - stage:
+    displayName: "Migration cd pipeline"
+    jobs:
+      - job: Publish
+        displayName: "Publish"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - checkout: self
+            clean: true
+            submodules: true
+            lfs: true
+
+          - task: UseDotNet@2
+            displayName: "Use .NET SDK"
+            inputs:
+              useGlobalJson: true
+
+          - bash: |
+              dotnet publish $(ProjectPath) --configuration Release -r linux-x64 --no-self-contained --output published
+            displayName: "Dotnet Publish"
+
+          - bash: |
+              docker build -t webapp .
+            displayName: "Docker Build"

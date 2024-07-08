@@ -1,2 +1,3 @@
 variables:
   SolutionPath: WebApp/WebApp.sln
+  ProjectPath: WebApp/WebApp/WebApp.csproj

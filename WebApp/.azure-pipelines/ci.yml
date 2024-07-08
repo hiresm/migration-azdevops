@@ -5,48 +5,40 @@ trigger: none
 
 stages:
   - stage:
-    displayName: 'Migration ci pipeline'
+    displayName: "Migration ci pipeline"
     jobs:
       - job: Build
-        displayName: 'Build'
+        displayName: "Build"
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: "ubuntu-latest"
         steps:
           - checkout: self
             clean: true
             submodules: true
             lfs: true
-            
+
           - task: UseDotNet@2
-            displayName: 'Use .NET SDK'
+            displayName: "Use .NET SDK"
             inputs:
               useGlobalJson: true
-          
+
           - bash: |
               dotnet restore $(SolutionPath)
-            displayName: 'Dotnet Restore'
-            
+            displayName: "Dotnet Restore"
+
           - bash: |
               dotnet build $(SolutionPath) --configuration Release --no-restore
-            displayName: 'Dotnet Build'
+            displayName: "Dotnet Build"
 
           - bash: |
               dotnet test $(SolutionPath) --configuration Release --no-build --no-restore --logger "trx;logfilename=testResults.trx" --collect "XPlat Code Coverage;Format=cobertura" --results-directory $(Common.TestResultsDirectory)
-            displayName: 'Dotnet Test'
-
-          - bash: |
-              dotnet publish $(SolutionPath) --configuration Release --no-build --no-restore --output $(Build.ArtifactStagingDirectory)
-            displayName: 'Dotnet Publish'
-
-          - bash: |
-              ls $(Common.TestResultsDirectory)
-            displayName: 'Check for test results files'
+            displayName: "Dotnet Test"
 
           - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
+            displayName: "Publish Test Results"
             inputs:
-              testResultsFiles: '*.trx'
-              testResultsFormat: 'VSTest'
+              testResultsFiles: "*.trx"
+              testResultsFormat: "VSTest"
               failTaskOnFailedTests: true
               searchFolder: $(Common.TestResultsDirectory)
             condition: succeededOrFailed()

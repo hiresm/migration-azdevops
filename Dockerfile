@@ -1,16 +1,6 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
-WORKDIR /app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 EXPOSE 80
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["WebApp/WebApp/WebApp.csproj", ""]
-RUN dotnet restore "./WebApp.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "WebApp.csproj" -c Release -o /app/build
-FROM build AS publish
-RUN dotnet publish "WebApp.csproj" -c Release o /app/publish
-FROM base AS final
+
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY published/ ./
 ENTRYPOINT ["dotnet", "WebApp.dll"]
