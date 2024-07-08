@@ -31,7 +31,7 @@ stages:
             displayName: 'Dotnet Build'
 
           - bash: |
-              dotnet test $(SolutionPath) --configuration Release --no-build --no-restore --logger "trx;logfilename=testResults.trx" --results-directory $(Common.TestResultsDirectory)
+              dotnet test $(SolutionPath) --configuration Release --no-build --no-restore --logger "trx;logfilename=testResults.trx" --collect "XPlat Code Coverage;Format=cobertura" --results-directory $(Common.TestResultsDirectory)
             displayName: 'Dotnet Test'
 
           - bash: |
