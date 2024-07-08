@@ -35,7 +35,7 @@ stages:
             displayName: 'Dotnet Test'
 
           - bash: |
-              dotnet publish $(SolutionPath) --configuration Release --no-build --no-restore --output $(Common.ArtifactStagingDirectory)
+              dotnet publish $(SolutionPath) --configuration Release --no-build --no-restore --output $(Build.ArtifactStagingDirectory)
             displayName: 'Dotnet Publish'
 
           - bash: |
