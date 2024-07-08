@@ -1,0 +1,40 @@
+trigger: none
+
+stages:
+  - stage:
+      jobs:
+        - job: Build
+          displayName: 'Build'
+          pool:
+            vmImage: 'ubuntu-latest'
+          steps:
+            - checkout: self
+              clean: true
+              submodules: true
+              lfs: true
+              
+            - task: UseDotNet@2
+              displayName: 'Use .NET SDK'
+              inputs:
+                useGlobalJson: true
+            
+            - bash: |
+                dotnet restore
+              displayName: 'Dotnet Restore'
+              
+            - bash: |
+                dotnet build --configuration Release --no-restore
+              displayName: 'Dotnet Build'
+
+            - bash: |
+                dotnet test --configuration Release --no-build --no-restore
+              displayName: 'Dotnet Test'
+
+            - task: PublishTestResults@2
+              displayName: 'Publish Test Results'
+              inputs:
+                testResultsFiles: '**/TestResults/*.trx'
+                testRunSystem: 'VSTS'
+                failTaskOnFailedTests: true
+              condition: succeededOrFailed()
+              
