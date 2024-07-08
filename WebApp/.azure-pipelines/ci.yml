@@ -31,7 +31,7 @@ stages:
             displayName: 'Dotnet Build'
 
           - bash: |
-              dotnet test $(SolutionPath) --configuration Release --no-build --no-restore
+              dotnet test $(SolutionPath) --configuration Release --no-build --no-restore --logger trx --results-directory $(Common.TestResultsDirectory)
             displayName: 'Dotnet Test'
 
           - task: PublishTestResults@2
@@ -40,4 +40,5 @@ stages:
               testResultsFiles: '**/TestResults/*.trx'
               testResultsFormat: 'VSTest'
               failTaskOnFailedTests: true
+              searchFolder: $(Common.TestResultsDirectory)
             condition: succeededOrFailed()
