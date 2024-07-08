@@ -40,12 +40,12 @@ stages:
 
           - bash: |
               ls $(Common.TestResultsDirectory)
-            displayName: 'Set BuildId'
+            displayName: 'Check for test results files'
 
           - task: PublishTestResults@2
             displayName: 'Publish Test Results'
             inputs:
-              testResultsFiles: '**/TestResults/*.trx'
+              testResultsFiles: '*.trx'
               testResultsFormat: 'VSTest'
               failTaskOnFailedTests: true
               searchFolder: $(Common.TestResultsDirectory)
