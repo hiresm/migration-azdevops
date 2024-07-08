@@ -1,3 +1,6 @@
+variables:
+  - template: templates/variables.yml
+
 trigger: none
 
 stages:
@@ -20,15 +23,15 @@ stages:
               useGlobalJson: true
           
           - bash: |
-              dotnet restore
+              dotnet restore $(SolutionPath)
             displayName: 'Dotnet Restore'
             
           - bash: |
-              dotnet build --configuration Release --no-restore
+              dotnet build $(SolutionPath) --configuration Release --no-restore
             displayName: 'Dotnet Build'
 
           - bash: |
-              dotnet test --configuration Release --no-build --no-restore
+              dotnet test $(SolutionPath) --configuration Release --no-build --no-restore
             displayName: 'Dotnet Test'
 
           - task: PublishTestResults@2
